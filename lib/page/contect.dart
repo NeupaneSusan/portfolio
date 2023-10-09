@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:portfolio/controller/controller.dart';
+import 'package:portfolio/widget/button.dart';
 
 import 'package:portfolio/widget/title.dart';
 
 class Contect extends StatefulWidget {
   const Contect({super.key});
-
   @override
   State<Contect> createState() => _ContectState();
 }
@@ -66,126 +66,119 @@ class _ContectState extends State<Contect> {
                         padding: const EdgeInsets.symmetric(
                             vertical: 20, horizontal: 18),
                         child: Form(
-                          key: formkey,
-                          child: ValueListenableBuilder(
-                              valueListenable: valueNotifier,
-                              builder: (context, bool isLoading, child) {
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 8),
-                                      child: Text(
-                                        'Message Me',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 8),
-                                      child: TextFormField(
-                                        controller: nameController,
-                                        validator: (String? value) {
-                                          if (value!.isEmpty) {
-                                            return "Can't be empty";
-                                          }
+                            key: formkey,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8),
+                                  child: Text(
+                                    'Message Me',
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium,
+                                  ),
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8),
+                                  child: TextFormField(
+                                    controller: nameController,
+                                    validator: (String? value) {
+                                      if (value!.isEmpty) {
+                                        return "Can't be empty";
+                                      }
 
-                                          return null;
-                                        },
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall,
-                                        decoration: const InputDecoration(
-                                            hintText: 'Enter Name',
-                                            border: OutlineInputBorder()),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 8),
-                                      child: TextFormField(
-                                        controller: emailController,
-                                        validator: (value) {
-                                          if (value!.isEmpty) {
-                                            return "Can't be empty";
-                                          }
-                                          final bool emailValid = RegExp(
-                                                  r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                              .hasMatch(value);
+                                      return null;
+                                    },
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall,
+                                    decoration: const InputDecoration(
+                                        hintText: 'Enter Name',
+                                        border: OutlineInputBorder()),
+                                  ),
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8),
+                                  child: TextFormField(
+                                    controller: emailController,
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return "Can't be empty";
+                                      }
+                                      final bool emailValid = RegExp(
+                                              r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                          .hasMatch(value);
 
-                                          if (!emailValid) {
-                                            return "Invaild email address.";
-                                          }
-                                          return null;
-                                        },
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall,
-                                        decoration: const InputDecoration(
-                                            hintText: 'Email',
-                                            border: OutlineInputBorder()),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 8),
-                                      child: TextFormField(
-                                        validator: (value) {
-                                          if (value!.isEmpty) {
-                                            return "Can't be empty";
-                                          }
-                                          return null;
-                                        },
-                                        controller: messageController,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall,
-                                        maxLines: 4,
-                                        decoration: const InputDecoration(
-                                            hintText: 'Message',
-                                            border: OutlineInputBorder()),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 8),
-                                      child: ElevatedButton(
-                                        onPressed: () {
-                                          final Map<String, dynamic> body = {
-                                            "name": nameController.text,
-                                            "email": emailController.text,
-                                            "message": messageController.text
-                                          };
-                                          if (formkey.currentState!
-                                                  .validate() &&
-                                              !isLoading) {
-                                            valueNotifier.value = true;
-                                            ControllerApi.sentMessage(
-                                                    body, context)
-                                                .then((v) {
-                                              if (v) {
-                                                clear();
-                                              }
-                                              valueNotifier.value = false;
-                                            });
-                                          }
-                                        },
-                                        child: isLoading
-                                            ? const CircularProgressIndicator(
-                                                color: Colors.white,
-                                              )
-                                            : const Text(
-                                                'Send',
-                                              ),
-                                      ),
-                                    )
-                                  ],
-                                );
-                              }),
-                        ),
+                                      if (!emailValid) {
+                                        return "Invaild email address.";
+                                      }
+                                      return null;
+                                    },
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall,
+                                    decoration: const InputDecoration(
+                                        hintText: 'Email',
+                                        border: OutlineInputBorder()),
+                                  ),
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8),
+                                  child: TextFormField(
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return "Can't be empty";
+                                      }
+                                      return null;
+                                    },
+                                    controller: messageController,
+                                    style:
+                                        Theme.of(context).textTheme.bodySmall,
+                                    maxLines: 4,
+                                    decoration: const InputDecoration(
+                                        hintText: 'Message',
+                                        border: OutlineInputBorder()),
+                                  ),
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8),
+                                  child: ValueListenableBuilder(
+                                      valueListenable: valueNotifier,
+                                      builder:
+                                          (context, bool isLoading, child) {
+                                        return OwnButton(
+                                          isLoading: isLoading,
+                                          onPressed: () {
+                                            final Map<String, dynamic> body = {
+                                              "name": nameController.text,
+                                              "email": emailController.text,
+                                              "message": messageController.text
+                                            };
+                                            if (formkey.currentState!
+                                                    .validate() &&
+                                                !isLoading) {
+                                              valueNotifier.value = true;
+                                              ControllerApi.sentMessage(
+                                                      body, context)
+                                                  .then(
+                                                (v) {
+                                                  if (v) {
+                                                    clear();
+                                                  }
+                                                  valueNotifier.value = false;
+                                                },
+                                              );
+                                            }
+                                          },
+                                          title: 'Send',
+                                        );
+                                      }),
+                                )
+                              ],
+                            )),
                       ),
                     ),
                   ),

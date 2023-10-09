@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:portfolio/controller/controller.dart';
+import 'package:portfolio/widget/button.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -47,14 +48,12 @@ class Home extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  ElevatedButton(
+                  OwnButton(
+                    title: 'Download CV',
                     onPressed: () {
                       ControllerApi.downloadCv(context);
                     },
-                    child: const Text(
-                      'Download CV',
-                    ),
-                  ),
+                  )
                 ],
               ),
             ),

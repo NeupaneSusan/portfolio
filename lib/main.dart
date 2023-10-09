@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
           ),
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ButtonStyle(
-              animationDuration: Duration(milliseconds: 500),
+              animationDuration: const Duration(milliseconds: 500),
               minimumSize: MaterialStateProperty.all(const Size(120, 48)),
               shape: MaterialStateProperty.all(
                 RoundedRectangleBorder(

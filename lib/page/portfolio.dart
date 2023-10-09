@@ -8,8 +8,10 @@ class Portfolio extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
+    print(width);
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40),
+      padding: EdgeInsets.symmetric(horizontal: width * 0.03),
       child: Column(
         children: [
           const SizedBox(
@@ -31,9 +33,9 @@ class Portfolio extends StatelessWidget {
           GridView.count(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            mainAxisSpacing: 20,
-            crossAxisSpacing: 20,
-            crossAxisCount: 3,
+            mainAxisSpacing: width >= 900 ? 20 : 8,
+            crossAxisSpacing: width >= 900 ? 20 : 8,
+            crossAxisCount: width >= 900 ? 3 : 2,
             children: const [
               CardPage(path: 'assets/22.png'),
               CardPage(

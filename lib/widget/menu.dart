@@ -24,6 +24,7 @@ class _HoveMenuState extends State<HoveMenu> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
     return MouseRegion(
       cursor: SystemMouseCursors.click,
       onEnter: (_) => onEntered(true),
@@ -36,7 +37,7 @@ class _HoveMenuState extends State<HoveMenu> {
               alignmentPolicy: ScrollPositionAlignmentPolicy.explicit);
         },
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.symmetric(horizontal: width * 0.02),
           child: Stack(
             children: [
               Padding(

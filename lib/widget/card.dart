@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class CardPage extends StatefulWidget {
   final String path;
   final bool isCover;
-  const CardPage({Key? key, required this.path, this.isCover = true})
+  const CardPage({Key? key, required this.path, this.isCover = false})
       : super(key: key);
 
   @override
