@@ -9,7 +9,7 @@ class Portfolio extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.sizeOf(context).width;
-    print(width);
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: width * 0.03),
       child: Column(

@@ -1,52 +1,59 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:portfolio/key.dart';
 
 import 'package:portfolio/widget/button.dart';
+import 'package:portfolio/widget/menu.dart';
 
-// ignore: must_be_immutable
 class NavBar extends StatefulWidget {
-  final List<Widget> menuList;
-  final AnimationController animationController;
-  final ValueNotifier<bool> valueNotifier;
-
   const NavBar({
     Key? key,
-    required this.menuList,
-    required this.animationController,
-    required this.valueNotifier,
   }) : super(key: key);
 
   @override
   State<NavBar> createState() => _NavBarState();
 }
 
-class _NavBarState extends State<NavBar> {
-  OverlayState? overlayState;
-
-  OverlayEntry? overlayEntry;
+class _NavBarState extends State<NavBar> with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _animation;
+  final ValueNotifier<bool> _isOpenValueNotifier = ValueNotifier(false);
+  late OverlayState _overlayState;
+  late OverlayEntry _overlayEntry;
 
   @override
   void initState() {
     super.initState();
-    overlayState = Overlay.of(context);
+
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 800));
+    _animation = Tween<double>(begin: 0, end: 1).animate(_animationController);
+    _overlayState = Overlay.of(context);
+    _overlayEntry = showMenus();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _animationController.dispose();
+    _isOpenValueNotifier.dispose();
+    _overlayEntry.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.sizeOf(context).width;
-    print(overlayEntry);
-
-    if (widget.valueNotifier.value && width > 944) {
-      if (overlayEntry != null) {
-        overlayEntry = null;
-        overlayEntry!.remove();
-      }
+    if (_isOpenValueNotifier.value && width > 944) {
+      _isOpenValueNotifier.value = false;
+      _animationController.reverse();
+      _overlayEntry.remove();
+      _overlayEntry = showMenus();
     }
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: width * 0.03,
+        vertical: 10,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -76,7 +83,18 @@ class _NavBarState extends State<NavBar> {
             Padding(
               padding: const EdgeInsets.only(top: 10.0),
               child: Row(
-                children: widget.menuList.map((e) => e).toList(),
+                children: menuList.map((e) {
+                  return GestureDetector(
+                      onTap: () {
+                        Scrollable.ensureVisible(
+                            e.key.currentContext as BuildContext,
+                            duration: const Duration(milliseconds: 800),
+                            curve: Curves.fastOutSlowIn,
+                            alignmentPolicy:
+                                ScrollPositionAlignmentPolicy.explicit);
+                      },
+                      child: HoveMenu(title: e.title));
+                }).toList(),
               ),
             ),
             OwnButton(
@@ -86,27 +104,22 @@ class _NavBarState extends State<NavBar> {
           ] else ...[
             GestureDetector(
               onTap: () {
-                if (widget.valueNotifier.value) {
-                  widget.animationController.reverse();
-                  widget.valueNotifier.value = false;
+                if (_isOpenValueNotifier.value) {
+                  _animationController
+                      .reverse()
+                      .whenComplete(() => {_overlayEntry.remove()});
+                  _isOpenValueNotifier.value = false;
 
-                  overlayEntry?.remove();
-                  overlayEntry = null;
                   return;
                 }
-                widget.animationController.forward();
-                widget.valueNotifier.value = true;
-                overlayEntry = showMenus(widget.menuList);
-                WidgetsBinding.instance.addPostFrameCallback(
-                    (_) => overlayState?.insert(overlayEntry!));
 
-                // showAboutDialog(
-                //     context: context,
-                //     children: [...menuList.map((e) => e).toList()]);
+                _animationController.forward();
+                _isOpenValueNotifier.value = true;
+                _overlayState.insert(_overlayEntry);
               },
               child: AnimatedIcon(
                 icon: AnimatedIcons.menu_close,
-                progress: widget.animationController,
+                progress: _animationController,
                 size: 45,
                 color: Colors.redAccent,
               ),
@@ -116,34 +129,60 @@ class _NavBarState extends State<NavBar> {
       ),
     );
   }
-}
 
-OverlayEntry showMenus(menuList) {
-  return OverlayEntry(
-    builder: (context) => Padding(
-      padding: const EdgeInsets.only(top: 69),
-      child: Material(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ...menuList
-                  .map(
-                    (e) => Padding(
-                      padding: const EdgeInsets.only(top: 20.0),
-                      child: e,
-                    ),
-                  )
-                  .toList(),
-              Padding(
-                padding: const EdgeInsets.only(top: 20.0, left: 10),
-                child: OwnButton(title: 'Hire Me', onPressed: () {}),
-              )
-            ],
-          ),
+  OverlayEntry showMenus() {
+    return OverlayEntry(builder: (_) {
+      return Positioned(
+        top: 85,
+        width: MediaQuery.sizeOf(_).width,
+        height: MediaQuery.sizeOf(_).height,
+        child: AnimatedBuilder(
+          animation: _animationController,
+          builder: (context, snapshot) {
+            return Opacity(
+              opacity: _animation.value,
+              child: Material(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ...menuList
+                          .map(
+                            (e) => Padding(
+                              padding: const EdgeInsets.only(top: 20.0),
+                              child: GestureDetector(
+                                  onTap: () {
+                                    _isOpenValueNotifier.value = false;
+                                    _animationController.reverse();
+
+                                    _overlayEntry.remove();
+                                    _overlayEntry = showMenus();
+                                    Scrollable.ensureVisible(
+                                        e.key.currentContext as BuildContext,
+                                        duration:
+                                            const Duration(milliseconds: 800),
+                                        curve: Curves.fastOutSlowIn,
+                                        alignmentPolicy:
+                                            ScrollPositionAlignmentPolicy
+                                                .explicit);
+                                  },
+                                  child: HoveMenu(title: e.title)),
+                            ),
+                          )
+                          .toList(),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20.0, left: 10),
+                        child: OwnButton(title: 'Hire Me', onPressed: () {}),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
         ),
-      ),
-    ),
-  );
+      );
+    });
+  }
 }

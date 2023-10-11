@@ -11,7 +11,7 @@ class Home extends StatelessWidget {
     return SizedBox(
       width: width,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: width * 0.03, vertical: 50),
+        padding: EdgeInsets.symmetric(horizontal: width * 0.03, vertical: 20),
         child: Wrap(
           runSpacing: 10,
           spacing: 10,

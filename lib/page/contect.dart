@@ -34,9 +34,8 @@ class _ContectState extends State<Contect> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.sizeOf(context).width;
-    return Container(
+    return Material(
       color: Colors.white,
-      width: width,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: width * 0.03),
         child: Column(

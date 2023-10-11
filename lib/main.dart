@@ -89,7 +89,7 @@ class MyApp extends StatelessWidget {
             surface: Colors.white,
             background: const Color(0xfffefafa),
           )),
-      home: const HomeView(),
+      home: const InitialPage(),
     );
   }
 }
