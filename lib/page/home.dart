@@ -19,14 +19,16 @@ class Home extends StatelessWidget {
           runAlignment: WrapAlignment.spaceBetween,
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
-            Container(
-              color: Colors.cyanAccent,
+            SizedBox(
               width: width < 1000 ? width : width * 0.55,
               child: Align(
                 alignment: Alignment.centerLeft,
                 child: SizedBox(
                   height: 500,
-                  child: Image.asset('assets/2.png'),
+                  child: Image.asset(
+                    'assets/stack.gif',
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
